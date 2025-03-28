@@ -13,13 +13,15 @@ RSpec.describe Product, type: :model do
     end
 
     it 'is invalid without a product_code' do
-      product = FactoryBot.build(:product, product_code: nil)
+      product = FactoryBot.build(:product, price_cents: nil)
       expect(product).not_to be_valid
+      expect(product.errors[:price_cents]).to include('is not a number')
     end
 
     it 'is invalid without a price' do
-      product = FactoryBot.build(:product, price: nil)
+      product = FactoryBot.build(:product, price_cents: nil)
       expect(product).not_to be_valid
+      expect(product.errors[:price_cents]).to include('is not a number')
     end
 
     it 'is invalid if the product_code is not unique' do
