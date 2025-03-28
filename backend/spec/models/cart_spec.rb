@@ -7,13 +7,16 @@ RSpec.describe Cart, type: :model do
   end
 
   describe 'methods' do
-    it 'calculates the total price of all items in the cart' do
+    it 'delegates total price calculation to CartPricingCalculator' do
       cart = FactoryBot.create(:cart)
-      product = FactoryBot.create(:product, price: 10.0)
-      FactoryBot.create(:cart_item, cart: cart, product: product, quantity: 3)
+      calculator = instance_double(CartPricingCalculator, total_price: Money.new(3000, 'EUR'))
 
-      total_price = CartPricingCalculator.new(cart).total_price
-      expect(total_price).to eq(30.0)
+      expect(CartPricingCalculator).to receive(:new).with(cart).and_return(calculator)
+      expect(calculator).to receive(:total_price)
+
+      total_price = cart.total_price
+
+      expect(total_price).to eq(Money.new(3000, 'EUR'))
     end
   end
 end

@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   validates :name, presence: true
   validates :product_code, presence: true, uniqueness: true, format: { with: /\A[A-Z]{2}\d\z/ }
+  validates :price_cents, presence: true, numericality: { greater_than_or_equal_to: 0 }
   monetize :price_cents, as: :price, numericality: { greater_than_or_equal_to: 0 }
 
   def formatted_price

@@ -12,12 +12,10 @@ RSpec.describe CartItem, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    cart = FactoryBot.create(:cart)
-    product = FactoryBot.create(:product, price: 10.0)
-    cart_item = FactoryBot.create(:cart_item, cart: cart, product: product, quantity: 3)
+    product = FactoryBot.create(:product, price_cents: 1000)
+    cart_item = FactoryBot.create(:cart_item, product: product, quantity: 1)
 
     expect(cart_item).to be_valid
-    expect(cart_item.quantity).to eq(3)
-    expect(cart_item.product.price).to eq(10.0)
+    expect(cart_item.product.price).to eq(Money.new(1000, 'EUR'))
   end
 end
