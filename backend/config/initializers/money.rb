@@ -64,9 +64,21 @@ MoneyRails.configure do |config|
   # BigDecimal::ROUND_DOWN,
   # BigDecimal::ROUND_HALF_UP,
   # BigDecimal::ROUND_HALF_DOWN,
-  Money.rounding_mode = BigDecimal::ROUND_HALF_EVEN
+  Money.rounding_mode = BigDecimal::ROUND_HALF_UP
   # BigDecimal::ROUND_CEILING,
   # BigDecimal::ROUND_FLOOR
+  Money.default_infinite_precision = true
+  # currencies = Money::Currency.table.dup
+
+  # # Unregister all existing currencies
+  # currencies.each do |_code, currency|
+  #   Money::Currency.unregister(currency)
+  # end
+
+  # # Re-register currencies with custom subunit_to_unit value
+  # currencies.each do |_code, currency|
+  #   Money::Currency.register(currency.merge(subunit_to_unit: 10000))
+  # end
   #
   # set to BigDecimal::ROUND_HALF_EVEN by default
   #
