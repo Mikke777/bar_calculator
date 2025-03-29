@@ -11,6 +11,13 @@ RSpec.describe CartItem, type: :model do
     it { is_expected.to validate_numericality_of(:quantity).is_greater_than(0) }
   end
 
+  describe 'factory' do
+    it 'has a valid factory' do
+      cart_item = FactoryBot.build(:cart_item)
+      expect(cart_item).to be_valid
+    end
+  end
+
   it 'is valid with valid attributes' do
     product = FactoryBot.create(:product, price_cents: 1000)
     cart_item = FactoryBot.create(:cart_item, product: product, quantity: 1)
