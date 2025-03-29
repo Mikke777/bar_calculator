@@ -2,7 +2,57 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::CartItems", type: :request do
   let!(:cart) { FactoryBot.create(:cart) }
-  let!(:product) { FactoryBot.create(:product, price_cents: Faker::Number.between(from: 100, to: 10_000)) }
+  let!(:product) { FactoryBot.create(:product, name: "Coffee", price_cents: 1123) }
+  let!(:product1) { FactoryBot.create(:product, name: "Green Tea", price_cents: 311) }
+  let!(:product2) { FactoryBot.create(:product, name: "Strawberries", price_cents: 500) }
+
+  describe "GET /api/v1/carts/:cart_id/cart_items" do
+    context "when the cart exists and has items" do
+      before do
+        FactoryBot.create(:cart_item, cart: cart, product: product1, quantity: 2)
+        FactoryBot.create(:cart_item, cart: cart, product: product2, quantity: 1)
+      end
+
+      it "returns the cart items with product details" do
+        get "/api/v1/carts/#{cart.id}/cart_items"
+
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body)
+
+        expect(json.length).to eq(2)
+
+        expect(json[0]["product"]["name"]).to eq("Green Tea")
+        expect(json[0]["product"]["price_cents"]).to eq(311)
+        expect(json[0]["quantity"]).to eq(2)
+
+        expect(json[1]["product"]["name"]).to eq("Strawberries")
+        expect(json[1]["product"]["price_cents"]).to eq(500)
+        expect(json[1]["quantity"]).to eq(1)
+      end
+    end
+
+    context "when the cart exists but has no items" do
+      it "returns an empty array" do
+        get "/api/v1/carts/#{cart.id}/cart_items"
+
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body)
+
+        expect(json).to eq([])
+      end
+    end
+
+    context "when the cart does not exist" do
+      it "returns an error" do
+        get "/api/v1/carts/9999/cart_items"
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+
+        expect(json["error"]).to eq("Cart not found")
+      end
+    end
+  end
 
   describe "POST /api/v1/carts/:cart_id/cart_items" do
     it "adds a product to the cart" do
