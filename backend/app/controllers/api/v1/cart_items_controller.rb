@@ -1,4 +1,21 @@
 class Api::V1::CartItemsController < ApplicationController
+
+  def index
+    cart = Cart.find_by(id: params[:cart_id])
+
+    if cart
+      cart_items = cart.cart_items.includes(:product)
+      render json: cart_items.as_json(
+        only: [:id, :quantity],
+        include: {
+          product: { only: [:name, :price_cents] }
+        }
+      )
+    else
+      render json: { error: "Cart not found" }, status: :not_found
+    end
+  end
+
   def create
     cart = Cart.find_by(id: params[:cart_id])
     product = Product.find_by(id: params[:product_id])
