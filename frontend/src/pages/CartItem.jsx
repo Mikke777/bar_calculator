@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { fetchCartItems } from "../api";
 
-const CartItem = () => {
+const CartItem = ({ cartId, refresh }) => {
+  console.log("Cart ID in CartItem:", cartId);
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadCartItems = async () => {
       try {
-        const data = await fetchCartItems();
-        setCartItems(data.cart_items || []);
+        const data = await fetchCartItems(cartId);
+        console.log("Fetched Cart Items:", data);
+        setCartItems(data || []);
       } catch (error) {
         console.error("Error fetching cart items:", error);
       } finally {
@@ -17,8 +20,10 @@ const CartItem = () => {
       }
     };
 
-    loadCartItems();
-  }, []);
+    if (cartId) {
+      loadCartItems();
+    }
+  }, [cartId, refresh]);
 
   if (loading) {
     return <p>Loading cart items...</p>;
