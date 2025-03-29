@@ -7,3 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+puts "Cleaning database..."
+Product.destroy_all
+Cart.destroy_all
+puts "Database cleaned"
+puts "Creating products..."
+Product.create([
+  { product_code: "GR1", name: "Green Tea", price: 311 },
+  { product_code: "SR1", name: "Strawberries", price: 500 },
+  { product_code: "CF1", name: "Coffee", price: 1123 }
+])
+
+puts "Seeded #{Product.count} products!"
