@@ -1,37 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { fetchProducts } from "../api";
-
 const Home = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchProducts();
-      setProducts(data);
-    };
-    loadProducts();
-  }, []);
-
   return (
     <div>
-      <h1>Products</h1>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-        {products.map((product) => (
-          <div
-            key={product.id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-              padding: "10px",
-              textAlign: "center",
-            }}
-          >
-            <h2>{product.name}</h2>
-            <p>{product.formatted_price}</p>
-            <button>Add to Cart</button>
-          </div>
-        ))}
-      </div>
+      <h1>CartItem place</h1>
+      <p>Welcome to the cart item page!</p>
+      <p>This is where you can view and manage your cart items.</p>
+      <p>Feel free to explore the features and functionalities.</p>
+      <p>If you have any questions, don't hesitate to ask!</p>
+      <p>Happy shopping!</p>
+      <p>For more information, check out the documentation.</p>
+      <p>Thank you for visiting our site!</p>
     </div>
   );
 };

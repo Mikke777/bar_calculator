@@ -13,9 +13,9 @@ Cart.destroy_all
 puts "Database cleaned"
 puts "Creating products..."
 Product.create([
-  { product_code: "GR1", name: "Green Tea", price: 311 },
-  { product_code: "SR1", name: "Strawberries", price: 500 },
-  { product_code: "CF1", name: "Coffee", price: 1123 }
+  { product_code: "GR1", name: "Green Tea", price_cents: 311 },
+  { product_code: "SR1", name: "Strawberries", price_cents: 500 },
+  { product_code: "CF1", name: "Coffee", price_cents: 1123 }
 ])
 
 puts "Seeded #{Product.count} products!"

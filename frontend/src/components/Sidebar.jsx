@@ -1,20 +1,34 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { fetchProducts } from "../api";
 
 const Sidebar = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await fetchProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
   return (
-    <div style={{ width: "250px", background: "#f4f4f4", padding: "20px" }}>
-      <h2>Sidebar</h2>
-      <nav>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          <li>
-            <Link to="/">Home</Link>
+    <div className="sidebar">
+      <h2 style={{ color: "black" }}>Products</h2>
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {products.map((product) => (
+          <li key={product.id} style={{ marginBottom: "10px", color: "black" }}>
+            <button style={{ width:"100% "}}>
+              {product.name} - {(product.formatted_price)}
+            </button>
           </li>
-          <li>
-            <Link to="/cart">Cart</Link>
-          </li>
-        </ul>
-      </nav>
+        ))}
+      </ul>
     </div>
   );
 };
