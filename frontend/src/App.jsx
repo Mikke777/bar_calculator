@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./components/Sidebar";
 import RightSidebar from "./components/RightSidebar";
-import Home from "./pages/Home";
+import CartItem from "./pages/CartItem";
 import "./App.css";
 
 const App = () => {
@@ -9,7 +9,7 @@ const App = () => {
       <div  id="root">
         <Sidebar />
         <div className="main-content">
-          <Home />
+          <CartItem />
         </div>
         <RightSidebar />
       </div>
