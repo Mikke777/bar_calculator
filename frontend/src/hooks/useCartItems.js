@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchCartItems } from "../api";
+import cable from "../cable";
 
 const useCartItems = (cartId, refresh) => {
   const [cartItems, setCartItems] = useState([]);
@@ -22,6 +23,20 @@ const useCartItems = (cartId, refresh) => {
 
     if (cartId) {
       loadCartItems();
+
+      const subscription = cable.subscriptions.create(
+        { channel: "CartChannel", cart_id: cartId },
+        {
+          received: (data) => {
+            console.log("WebSocket Update:", data);
+            setCartItems(data || []);
+          },
+        }
+      );
+
+      return () => {
+        subscription.unsubscribe();
+      };
     }
   }, [cartId, refresh]);
 

@@ -33,6 +33,19 @@ class Api::V1::CartItemsController < ApplicationController
       cart_item.quantity = (cart_item.quantity || 0) + params[:quantity].to_i
 
       if cart_item.save
+        ActionCable.server.broadcast(
+          "cart_#{cart.id}",
+          cart.cart_items.as_json(
+            only: [:id, :quantity],
+            include: {
+              product: {
+                only: [:name, :price_cents],
+                methods: [:formatted_price]
+              }
+            }
+          )
+        )
+
         render json: cart_item.as_json(include: :product), status: :created
       else
         render json: { errors: cart_item.errors.full_messages }, status: :unprocessable_entity
@@ -49,6 +62,19 @@ class Api::V1::CartItemsController < ApplicationController
       cart_item.quantity = params[:quantity].to_i
 
       if cart_item.save
+        ActionCable.server.broadcast(
+          "cart_#{cart_item.cart.id}",
+          cart_item.cart.cart_items.as_json(
+            only: [:id, :quantity],
+            include: {
+              product: {
+                only: [:name, :price_cents],
+                methods: [:formatted_price]
+              }
+            }
+          )
+        )
+
         render json: cart_item.as_json(include: :product)
       else
         render json: { errors: cart_item.errors.full_messages }, status: :unprocessable_entity
@@ -62,7 +88,22 @@ class Api::V1::CartItemsController < ApplicationController
     cart_item = CartItem.find_by(id: params[:id])
 
     if cart_item
+      cart = cart_item.cart
       cart_item.destroy
+
+      ActionCable.server.broadcast(
+        "cart_#{cart.id}",
+        cart.cart_items.as_json(
+          only: [:id, :quantity],
+          include: {
+            product: {
+              only: [:name, :price_cents],
+              methods: [:formatted_price]
+            }
+          }
+        )
+      )
+
       render json: { message: "CartItem removed successfully" }, status: :ok
     else
       render json: { error: "CartItem not found" }, status: :not_found
