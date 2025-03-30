@@ -1,23 +1,10 @@
 import React from "react";
 import useProducts from "../hooks/useProducts";
-import { addProductToCart } from "../api";
+import useCartItemActions from "../hooks/useCartItemActions";
 
 const Sidebar = ({ cartId }) => {
   const { products, loading, error } = useProducts();
-
-  const handleAddToCart = async (productId) => {
-    try {
-      if (!cartId) {
-        console.error("No cart ID available");
-        return;
-      }
-
-      await addProductToCart(cartId, productId);
-      alert("Product added to cart!");
-    } catch (err) {
-      console.error("Error adding product to cart:", err);
-    }
-  };
+  const { handleAddToCart } = useCartItemActions(cartId);
 
   if (loading) {
     return <p>Loading products...</p>;

@@ -12,7 +12,8 @@ const useCartItems = (cartId, refresh) => {
       try {
         setLoading(true);
         const data = await fetchCartItems(cartId);
-        setCartItems(data || []);
+        const sortedItems = (data || []).sort((a, b) => a.id - b.id);
+        setCartItems(sortedItems);
       } catch (err) {
         console.error("Error fetching cart items:", err);
         setError(err);
@@ -28,13 +29,24 @@ const useCartItems = (cartId, refresh) => {
         { channel: "CartChannel", cart_id: cartId },
         {
           received: (data) => {
-            console.log("WebSocket Update:", data);
-            setCartItems(data || []);
+            console.log("WebSocket Update Received:", data);
+            const sortedItems = (data || []).sort((a, b) => a.id - b.id);
+            setCartItems(sortedItems);
+          },
+          connected: () => {
+            console.log(`WebSocket connected to CartChannel for cart_id: ${cartId}`);
+          },
+          disconnected: () => {
+            console.warn(`WebSocket disconnected from CartChannel for cart_id: ${cartId}`);
+          },
+          rejected: () => {
+            console.error(`WebSocket subscription rejected for cart_id: ${cartId}`);
           },
         }
       );
 
       return () => {
+        console.log(`Unsubscribing from CartChannel for cart_id: ${cartId}`);
         subscription.unsubscribe();
       };
     }
