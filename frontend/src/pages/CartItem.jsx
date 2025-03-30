@@ -1,8 +1,10 @@
 import React from "react";
 import useCartItems from "../hooks/useCartItems";
+import useCartItemActions from "../hooks/useCartItemActions";
 
 const CartItem = ({ cartId, refresh }) => {
   const { cartItems, loading, error } = useCartItems(cartId, refresh);
+  const { handleIncreaseQuantity, handleDecreaseQuantity, handleRemoveItem } = useCartItemActions(cartId);
 
   if (loading) {
     return <p>Loading cart items...</p>;
@@ -21,8 +23,13 @@ const CartItem = ({ cartId, refresh }) => {
         <ul style={{ listStyle: "none", padding: 0 }}>
           {cartItems.map((item) => (
             <li key={item.id} style={{ marginBottom: "10px" }}>
-              {item.product.name} - Quantity: {item.quantity} -
-              Price {item.product.formatted_price}
+              {item.product.name} - Quantity: {item.quantity} - Price: {item.product.formatted_price}
+              <button onClick={() => handleIncreaseQuantity(item)}>+</button>
+              {item.quantity > 1 ? (
+                <button onClick={() => handleDecreaseQuantity(item)}>-</button>
+              ) : (
+                <button onClick={() => handleRemoveItem(item)}>x</button>
+              )}
             </li>
           ))}
         </ul>
