@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchCartItems } from "../api";
-import cable from "../cable";
+import cable from "../websockets/cable";
 
 const useCartItems = (cartId, refresh) => {
   const [cartItems, setCartItems] = useState([]);
@@ -8,6 +8,7 @@ const useCartItems = (cartId, refresh) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+
     const loadCartItems = async () => {
       try {
         setLoading(true);
@@ -25,30 +26,19 @@ const useCartItems = (cartId, refresh) => {
     if (cartId) {
       loadCartItems();
 
-      const subscription = cable.subscriptions.create(
+      // Subscribe to WebSocket channel
+      cable.subscriptions.create(
         { channel: "CartChannel", cart_id: cartId },
         {
           received: (data) => {
-            console.log("WebSocket Update Received:", data);
             const sortedItems = (data || []).sort((a, b) => a.id - b.id);
             setCartItems(sortedItems);
           },
-          connected: () => {
-            console.log(`WebSocket connected to CartChannel for cart_id: ${cartId}`);
-          },
-          disconnected: () => {
-            console.warn(`WebSocket disconnected from CartChannel for cart_id: ${cartId}`);
-          },
-          rejected: () => {
-            console.error(`WebSocket subscription rejected for cart_id: ${cartId}`);
-          },
+          connected: () => {},
+          disconnected: () => {},
+          rejected: () => {},
         }
       );
-
-      return () => {
-        console.log(`Unsubscribing from CartChannel for cart_id: ${cartId}`);
-        subscription.unsubscribe();
-      };
     }
   }, [cartId, refresh]);
 

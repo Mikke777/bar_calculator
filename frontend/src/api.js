@@ -44,6 +44,13 @@ export const fetchCartItems = async (cartId) => {
   return response.data;
 };
 
+// Fetch all cart items for a specific cart with calculation
+export const fetchCartItemsWithCalculation = async (cartId) => {
+  const response = await fetch(`http://localhost:3000/api/v1/carts/${cartId}/calculate_total`);
+  const data = await response.json();
+  return data.cart_items;
+};
+
 // Add a product to the cart
 export const addProductToCart = async (cartId, productId) => {
   const response = await api.post(`/carts/${cartId}/cart_items`, {
@@ -65,4 +72,10 @@ export const updateCartItem = async (cartId, cartItemId, quantity) => {
 export const deleteCartItem = async (cartId, cartItemId) => {
   const response = await api.delete(`/carts/${cartId}/cart_items/${cartItemId}`);
   return response.data;
+};
+
+// Calculate the total price of a cart (with discounts applied)
+export const calculateCartTotal = async (cartId) => {
+  const response = await api.get(`/carts/${cartId}/calculate_total`);
+  return response.data.total_price;
 };
