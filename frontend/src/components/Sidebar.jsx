@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { fetchProducts, addProductToCart } from "../api";
+import React from "react";
+import useProducts from "../hooks/useProducts";
+import { addProductToCart } from "../api";
 
 const Sidebar = ({ cartId }) => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    loadProducts();
-  }, []);
+  const { products, loading, error } = useProducts();
 
   const handleAddToCart = async (productId) => {
     try {
@@ -26,10 +14,18 @@ const Sidebar = ({ cartId }) => {
 
       await addProductToCart(cartId, productId);
       alert("Product added to cart!");
-    } catch (error) {
-      console.error("Error adding product to cart:", error);
+    } catch (err) {
+      console.error("Error adding product to cart:", err);
     }
   };
+
+  if (loading) {
+    return <p>Loading products...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading products. Please try again later.</p>;
+  }
 
   return (
     <div className="sidebar">

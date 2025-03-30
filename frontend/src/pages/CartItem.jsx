@@ -1,32 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { fetchCartItems } from "../api";
+import React from "react";
+import useCartItems from "../hooks/useCartItems";
 
 const CartItem = ({ cartId, refresh }) => {
-  console.log("Cart ID in CartItem:", cartId);
-
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadCartItems = async () => {
-      try {
-        const data = await fetchCartItems(cartId);
-        console.log("Fetched Cart Items:", data);
-        setCartItems(data || []);
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (cartId) {
-      loadCartItems();
-    }
-  }, [cartId, refresh]);
+  const { cartItems, loading, error } = useCartItems(cartId, refresh);
 
   if (loading) {
     return <p>Loading cart items...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading cart items. Please try again later.</p>;
   }
 
   return (
@@ -38,8 +21,8 @@ const CartItem = ({ cartId, refresh }) => {
         <ul style={{ listStyle: "none", padding: 0 }}>
           {cartItems.map((item) => (
             <li key={item.id} style={{ marginBottom: "10px" }}>
-              {item.product.name} - Quantity: {item.quantity} - Price:{" "}
-              {(item.product.price_cents / 100).toFixed(2)} €
+              {item.product.name} - Quantity: {item.quantity} -
+              Price {item.product.formatted_price}
             </li>
           ))}
         </ul>

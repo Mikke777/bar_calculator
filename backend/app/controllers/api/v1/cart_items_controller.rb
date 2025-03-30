@@ -8,7 +8,10 @@ class Api::V1::CartItemsController < ApplicationController
       render json: cart_items.as_json(
         only: [:id, :quantity],
         include: {
-          product: { only: [:name, :price_cents] }
+          product: {
+            only: [:name, :price_cents],
+            methods: [:formatted_price]
+           }
         }
       )
     else
