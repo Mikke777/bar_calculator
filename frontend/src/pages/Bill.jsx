@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { fetchCartItemsWithCalculation, calculateCartTotal } from "../api";
+import { fetchCartItemsWithCalculation, calculateCartTotal, deleteCart } from "../api";
 
-const Bill = ({ cartId }) => {
+const Bill = ({ cartId, onCartClosed }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState({ cents: 0, currency_iso: "EUR" });
   const [loading, setLoading] = useState(true);
@@ -25,6 +25,16 @@ const Bill = ({ cartId }) => {
     loadCartItems();
   }, [cartId]);
 
+  const handlePaid = async () => {
+    try {
+      await deleteCart(cartId);
+      alert("Cart successfully closed!");
+      onCartClosed();
+    } catch (err) {
+      console.error("Error closing the cart:", err);
+      alert("Failed to close the cart.");
+    }
+  };
 
   const formatPrice = (price) => {
     if (!price || typeof price.cents !== "number") {
@@ -98,6 +108,19 @@ const Bill = ({ cartId }) => {
           </tr>
         </tfoot>
       </table>
+      <button
+        onClick={handlePaid}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          backgroundColor: "green",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Paid
+      </button>
     </div>
   );
 };

@@ -95,4 +95,25 @@ RSpec.describe 'Carts API', type: :request do
       expect(json['errors']).to eq([ 'Failed to create cart' ])
     end
   end
+
+  describe 'DELETE /api/v1/carts/:id' do
+    let!(:cart) { FactoryBot.create(:cart) }
+
+    it 'deletes the cart successfully' do
+      delete "/api/v1/carts/#{cart.id}"
+
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json['message']).to eq('Cart successfully deleted')
+      expect(Cart.find_by(id: cart.id)).to be_nil
+    end
+
+    it 'returns a 404 error if the cart does not exist' do
+      delete '/api/v1/carts/9999'
+
+      expect(response).to have_http_status(:not_found)
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq('Cart not found')
+    end
+  end
 end
