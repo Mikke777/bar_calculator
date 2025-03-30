@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import RightSidebar from "./components/RightSidebar";
 import CartItem from "./pages/CartItem";
+import Bill from "./pages/Bill";
 import { fetchCarts, createCart } from "./api";
 import "./App.css";
 
@@ -10,10 +11,8 @@ const App = () => {
   const [carts, setCarts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentCartId, setCurrentCartId] = useState(null);
+  const [showBill, setShowBill] = useState(false);
   const navigate = useNavigate();
-
-  console.log("Current Cart ID in App:", currentCartId);
-
 
   useEffect(() => {
     const loadCarts = async () => {
@@ -44,6 +43,10 @@ const App = () => {
     }
   };
 
+  const handleToggleView = () => {
+    setShowBill((prev) => !prev);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -60,11 +63,12 @@ const App = () => {
           </div>
         </div>
       )}
-      <Sidebar cartId={currentCartId} />
+      <Sidebar cartId={currentCartId} isCalculating={showBill} />
       <div className="main-content">
-        {currentCartId && <CartItem cartId={currentCartId} />}
+        {currentCartId && !showBill && <CartItem cartId={currentCartId} />}
+        {currentCartId && showBill && <Bill cartId={currentCartId} />}
       </div>
-      <RightSidebar />
+      <RightSidebar onToggleView={handleToggleView} isCalculating={showBill} />
     </div>
   );
 };

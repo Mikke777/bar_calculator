@@ -2,7 +2,7 @@ import React from "react";
 import useProducts from "../hooks/useProducts";
 import useCartItemActions from "../hooks/useCartItemActions";
 
-const Sidebar = ({ cartId }) => {
+const Sidebar = ({ cartId, isCalculating }) => {
   const { products, loading, error } = useProducts();
   const { handleAddToCart } = useCartItemActions(cartId);
 
@@ -15,7 +15,13 @@ const Sidebar = ({ cartId }) => {
   }
 
   return (
-    <div className="sidebar">
+    <div
+      className="sidebar"
+      style={{
+        opacity: isCalculating ? 0.5 : 1,
+        pointerEvents: isCalculating ? "none" : "auto",
+      }}
+    >
       <h2 style={{ color: "black" }}>Products</h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
         {products.map((product) => (
@@ -23,6 +29,7 @@ const Sidebar = ({ cartId }) => {
             <button
               style={{ width: "100%" }}
               onClick={() => handleAddToCart(product.id)}
+              disabled={isCalculating}
             >
               {product.name} - {product.formatted_price}
             </button>

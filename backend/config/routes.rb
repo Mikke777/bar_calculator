@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :carts, only: [:index, :show, :create] do
         resources :cart_items, only: [:index, :create, :update, :destroy]
+        member do
+          get :calculate_total
+        end
       end
       resources :products, only: [:index]
     end

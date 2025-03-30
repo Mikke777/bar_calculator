@@ -7,12 +7,18 @@ class CartPricingCalculator
 
   def initialize(cart)
     @cart = cart
+    @discounted_prices = {}
   end
 
   def total_price
-    @cart.cart_items.includes(:product).sum do |item|
-      apply_discounts(item)
+    total_cents = @cart.cart_items.includes(:product).sum do |item|
+      discounted_price_for(item)
     end
+    Money.new(total_cents, 'EUR')
+  end
+
+  def discounted_price_for(cart_item)
+    @discounted_prices[cart_item.id] ||= apply_discounts(cart_item)
   end
 
   private
@@ -23,9 +29,9 @@ class CartPricingCalculator
       discounted_price = discount.apply
 
       if discounted_price < cart_item.product.price * cart_item.quantity
-        return discounted_price
+        return discounted_price.cents
       end
     end
-    cart_item.product.price * cart_item.quantity
+    cart_item.product.price.cents * cart_item.quantity
   end
 end
