@@ -56,4 +56,14 @@ class Api::V1::CartsController < ApplicationController
       render json: { error: "Cart not found" }, status: :not_found
     end
   end
+
+  def destroy
+    cart = Cart.find_by(id: params[:id])
+    if cart
+      cart.destroy
+      render json: { message: "Cart successfully deleted" }, status: :ok
+    else
+      render json: { error: "Cart not found" }, status: :not_found
+    end
+  end
 end

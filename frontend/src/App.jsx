@@ -47,6 +47,11 @@ const App = () => {
     setShowBill((prev) => !prev);
   };
 
+  const handleCartClosed = () => {
+    setCurrentCartId(null);
+    setShowBill(false);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -66,7 +71,9 @@ const App = () => {
       <Sidebar cartId={currentCartId} isCalculating={showBill} />
       <div className="main-content">
         {currentCartId && !showBill && <CartItem cartId={currentCartId} />}
-        {currentCartId && showBill && <Bill cartId={currentCartId} />}
+        {currentCartId && showBill && (
+          <Bill cartId={currentCartId} onCartClosed={handleCartClosed} />
+        )}
       </div>
       <RightSidebar onToggleView={handleToggleView} isCalculating={showBill} />
     </div>

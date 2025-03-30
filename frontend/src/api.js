@@ -79,3 +79,14 @@ export const calculateCartTotal = async (cartId) => {
   const response = await api.get(`/carts/${cartId}/calculate_total`);
   return response.data.total_price;
 };
+
+// Checkout a cart
+export const deleteCart = async (cartId) => {
+  try {
+    const response = await api.delete(`/carts/${cartId}`);
+    return response.data;
+  } catch (err) {
+    console.error("Error in deleteCart API call:", err.response?.data || err.message);
+    throw new Error(err.response?.data?.error || "Failed to delete cart");
+  }
+};

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :carts, only: [:index, :show, :create] do
+      resources :carts, only: [:index, :show, :create, :destroy] do
         resources :cart_items, only: [:index, :create, :update, :destroy]
         member do
           get :calculate_total
