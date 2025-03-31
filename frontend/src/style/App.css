@@ -59,6 +59,7 @@ body,
 .main-content {
   margin-left: 20rem;
   margin-right: 20rem;
+  width: 50rem;
   padding: 20px;
   flex: 1;
 }

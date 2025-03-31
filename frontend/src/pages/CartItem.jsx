@@ -1,6 +1,7 @@
 import React from "react";
 import useCartItems from "../hooks/useCartItems";
 import useCartItemActions from "../hooks/useCartItemActions";
+import CartItemRow from "../components/CartItemRow";
 import "../style/CartItem/CartItem.css";
 
 const CartItem = ({ cartId, refresh }) => {
@@ -17,25 +18,31 @@ const CartItem = ({ cartId, refresh }) => {
 
   return (
     <div>
-      <h1>Cart Items</h1>
+      <h1>Cart #{cartId} Items</h1>
       {cartItems.length === 0 ? (
         <p>No cart items</p>
       ) : (
-        <ul className="cart-item-list">
-          {cartItems.map((item) => (
-            <li key={item.id} className="cart-item">
-              {item.product.name} - Quantity: {item.quantity} - Price: {item.product.formatted_price}
-              <button onClick={() => handleIncreaseQuantity(item)}>+</button>
-              {item.quantity > 1 ? (
-                <button onClick={() => handleDecreaseQuantity(item)}>-</button>
-              ) : (
-                <button onClick={() => handleRemoveItem(item)} className="remove">
-                  x
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
+        <table className="cart-item-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <CartItemRow
+                key={item.id}
+                item={item}
+                onIncrease={handleIncreaseQuantity}
+                onDecrease={handleDecreaseQuantity}
+                onRemove={handleRemoveItem}
+              />
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
