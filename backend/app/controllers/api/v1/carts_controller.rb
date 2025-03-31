@@ -33,7 +33,7 @@ class Api::V1::CartsController < ApplicationController
           currency_iso: calculator.total_price.currency.iso_code
         },
         cart_items: cart.cart_items.map do |item|
-          discounted_price = Money.new(calculator.discounted_price_for(item), 'EUR')
+          discounted_price = Money.new(calculator.discounted_price_for(item), "EUR")
           {
             id: item.id,
             product: {
@@ -41,7 +41,7 @@ class Api::V1::CartsController < ApplicationController
               name: item.product.name,
               price: {
                 cents: item.product.price.cents.to_i,
-                currency_iso: 'EUR'
+                currency_iso: "EUR"
               }
             },
             quantity: item.quantity,
