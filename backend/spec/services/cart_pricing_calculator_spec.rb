@@ -27,7 +27,7 @@ RSpec.describe CartPricingCalculator, type: :service do
       FactoryBot.create(:cart_item, cart: cart, product: coffee, quantity: 3)
 
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(2247, 'EUR'))
+      expect(calculator.total_price).to eq(Money.new(2246, 'EUR'))
     end
 
     it 'returns zero for an empty cart' do
@@ -42,7 +42,7 @@ RSpec.describe CartPricingCalculator, type: :service do
       FactoryBot.create(:cart_item, cart: cart, product: coffee, quantity: 10_000)
 
       calculator = CartPricingCalculator.new(cart)
-      discounted_price_cents = (coffee.price_cents * Rational(2, 3)).round
+      discounted_price_cents = (coffee.price_cents * Rational(2, 3))
 
       expected_total_price_cents = discounted_price_cents * 10_000
 

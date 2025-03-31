@@ -67,7 +67,7 @@ MoneyRails.configure do |config|
   Money.rounding_mode = BigDecimal::ROUND_HALF_UP
   # BigDecimal::ROUND_CEILING,
   # BigDecimal::ROUND_FLOOR
-  Money.default_infinite_precision = true
+  Money.default_infinite_precision = false
   # currencies = Money::Currency.table.dup
 
   # # Unregister all existing currencies

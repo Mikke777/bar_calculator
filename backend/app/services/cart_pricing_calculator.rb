@@ -14,7 +14,8 @@ class CartPricingCalculator
     total_cents = @cart.cart_items.includes(:product).sum do |item|
       discounted_price_for(item)
     end
-    Money.new(total_cents, 'EUR')
+
+    Money.new(total_cents.round, 'EUR')
   end
 
   def discounted_price_for(cart_item)
