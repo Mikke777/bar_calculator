@@ -1,6 +1,7 @@
 import React from "react";
 import useCartItems from "../hooks/useCartItems";
 import useCartItemActions from "../hooks/useCartItemActions";
+import "../style/CartItem/CartItem.css";
 
 const CartItem = ({ cartId, refresh }) => {
   const { cartItems, loading, error } = useCartItems(cartId, refresh);
@@ -20,15 +21,17 @@ const CartItem = ({ cartId, refresh }) => {
       {cartItems.length === 0 ? (
         <p>No cart items</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="cart-item-list">
           {cartItems.map((item) => (
-            <li key={item.id} style={{ marginBottom: "10px" }}>
+            <li key={item.id} className="cart-item">
               {item.product.name} - Quantity: {item.quantity} - Price: {item.product.formatted_price}
               <button onClick={() => handleIncreaseQuantity(item)}>+</button>
               {item.quantity > 1 ? (
                 <button onClick={() => handleDecreaseQuantity(item)}>-</button>
               ) : (
-                <button onClick={() => handleRemoveItem(item)}>x</button>
+                <button onClick={() => handleRemoveItem(item)} className="remove">
+                  x
+                </button>
               )}
             </li>
           ))}

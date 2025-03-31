@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchCartItemsWithCalculation, calculateCartTotal, deleteCart } from "../api";
+import "../style/Bill/Bill.css";
 
 const Bill = ({ cartId, onCartClosed }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -50,13 +51,13 @@ const Bill = ({ cartId, onCartClosed }) => {
   return (
     <div>
       <h1>Bill</h1>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="bill-table">
         <thead>
           <tr>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Product Code</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Name</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Quantity</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Final Price</th>
+            <th>Product Code</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Final Price</th>
           </tr>
         </thead>
         <tbody>
@@ -71,10 +72,10 @@ const Bill = ({ cartId, onCartClosed }) => {
 
               return (
                 <tr key={item.id}>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>{item.product.product_code || "N/A"}</td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>{item.product.name || "N/A"}</td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantity || 0}</td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                  <td>{item.product.product_code || "N/A"}</td>
+                  <td>{item.product.name || "N/A"}</td>
+                  <td>{item.quantity || 0}</td>
+                  <td>
                     {discountedPrice.cents < originalPrice.cents ? (
                       <>
                         <span style={{ textDecoration: "line-through", color: "red" }}>
@@ -91,7 +92,7 @@ const Bill = ({ cartId, onCartClosed }) => {
             })
           ) : (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center", padding: "8px" }}>
+              <td colSpan="4" style={{ textAlign: "center" }}>
                 No items in the cart.
               </td>
             </tr>
@@ -99,26 +100,14 @@ const Bill = ({ cartId, onCartClosed }) => {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan="3" style={{ border: "1px solid black", padding: "8px", textAlign: "right" }}>
-              <strong>Total:</strong>
-            </td>
-            <td style={{ border: "1px solid black", padding: "8px" }}>
+            <td colSpan="3">Total:</td>
+            <td>
               <strong>{formatPrice(totalPrice)}</strong>
             </td>
           </tr>
         </tfoot>
       </table>
-      <button
-        onClick={handlePaid}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          backgroundColor: "green",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
+      <button onClick={handlePaid} className="bill-button">
         Paid
       </button>
     </div>
