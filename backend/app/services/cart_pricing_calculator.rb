@@ -15,7 +15,7 @@ class CartPricingCalculator
       discounted_price_for(item)
     end
 
-    Money.new(total_cents.round, 'EUR')
+    Money.new(total_cents.round, "EUR")
   end
 
   def discounted_price_for(cart_item)

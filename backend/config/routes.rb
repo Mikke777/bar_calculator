@@ -9,15 +9,15 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :carts, only: [:index, :show, :create, :destroy] do
-        resources :cart_items, only: [:index, :create, :update, :destroy]
+      resources :carts, only: [ :index, :show, :create, :destroy ] do
+        resources :cart_items, only: [ :index, :create, :update, :destroy ]
         member do
           get :calculate_total
         end
       end
-      resources :products, only: [:index]
+      resources :products, only: [ :index ]
     end
   end
 
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 end

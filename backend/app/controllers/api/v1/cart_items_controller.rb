@@ -1,16 +1,15 @@
 class Api::V1::CartItemsController < ApplicationController
-
   def index
     cart = Cart.find_by(id: params[:cart_id])
 
     if cart
       cart_items = cart.cart_items.includes(:product)
       render json: cart_items.as_json(
-        only: [:id, :quantity],
+        only: [ :id, :quantity ],
         include: {
           product: {
-            only: [:name, :price_cents],
-            methods: [:formatted_price]
+            only: [ :name, :price_cents ],
+            methods:  [ :formatted_price ]
            }
         }
       )
@@ -36,11 +35,11 @@ class Api::V1::CartItemsController < ApplicationController
         ActionCable.server.broadcast(
           "cart_#{cart.id}",
           cart.cart_items.as_json(
-            only: [:id, :quantity],
+            only: [ :id, :quantity ],
             include: {
               product: {
-                only: [:name, :price_cents],
-                methods: [:formatted_price]
+                only: [ :name, :price_cents ],
+                methods: [ :formatted_price ]
               }
             }
           )
@@ -68,11 +67,11 @@ class Api::V1::CartItemsController < ApplicationController
           ActionCable.server.broadcast(
             "cart_#{cart_item.cart.id}",
             cart_item.cart.cart_items.as_json(
-              only: [:id, :quantity],
+              only: [ :id, :quantity ],
               include: {
                 product: {
-                  only: [:name, :price_cents],
-                  methods: [:formatted_price]
+                  only: [ :name, :price_cents ],
+                  methods: [ :formatted_price ]
                 }
               }
             )
@@ -100,11 +99,11 @@ class Api::V1::CartItemsController < ApplicationController
       ActionCable.server.broadcast(
         "cart_#{cart.id}",
         cart.cart_items.as_json(
-          only: [:id, :quantity],
+          only: [ :id, :quantity ],
           include: {
             product: {
-              only: [:name, :price_cents],
-              methods: [:formatted_price]
+              only: [ :name, :price_cents ],
+              methods: [ :formatted_price ]
             }
           }
         )

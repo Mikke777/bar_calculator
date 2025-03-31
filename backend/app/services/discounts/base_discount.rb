@@ -5,7 +5,7 @@ module Discounts
     end
 
     def apply
-      raise NotImplementedError, 'Subclasses must implement the apply method'
+      raise NotImplementedError, "Subclasses must implement the apply method"
     end
   end
 end
