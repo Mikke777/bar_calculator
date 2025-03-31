@@ -26,7 +26,6 @@ const useCartItems = (cartId, refresh) => {
     if (cartId) {
       loadCartItems();
 
-      // Subscribe to WebSocket channel
       cable.subscriptions.create(
         { channel: "CartChannel", cart_id: cartId },
         {

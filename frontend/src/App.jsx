@@ -37,7 +37,7 @@ const App = () => {
           </div>
         </div>
       )}
-      <Sidebar cartId={currentCartId} isCalculating={showBill} />
+      <Sidebar cartId={currentCartId} isCalculating={showBill} isOnIndexCarts={showIndexCarts} />
       <div className="main-content">
         {showIndexCarts ? (
           <IndexCarts carts={carts} onViewCart={handleViewCart} />
@@ -52,6 +52,8 @@ const App = () => {
         isCalculating={showBill}
         onOpenNewCart={handleOpenNewCart}
         onViewAllCarts={handleViewAllCarts}
+        isOnBillPage={showBill}
+        isOnIndexCarts={showIndexCarts}
       />
     </div>
   );
