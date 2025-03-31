@@ -10,45 +10,54 @@ RSpec.describe CartPricingCalculator, type: :service do
       cart = FactoryBot.create(:cart)
       FactoryBot.create(:cart_item, cart: cart, product: green_tea, quantity: 2)
 
+      expected_price = Money.new(green_tea.price_cents, 'EUR')
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(311, 'EUR'))
+
+      expect(calculator.total_price).to eq(expected_price)
     end
 
     it 'applies bulk discount for strawberries (SR1)' do
       cart = FactoryBot.create(:cart)
       FactoryBot.create(:cart_item, cart: cart, product: strawberries, quantity: 3)
 
+      discounted_price_per_item = 450
+      expected_price = Money.new(discounted_price_per_item * 3, 'EUR')
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(1350, 'EUR'))
+
+      expect(calculator.total_price).to eq(expected_price)
     end
 
     it 'applies price reduction for coffee (CF1)' do
       cart = FactoryBot.create(:cart)
       FactoryBot.create(:cart_item, cart: cart, product: coffee, quantity: 3)
 
+      discounted_price_per_item = (coffee.price_cents * Rational(2, 3))
+      expected_price = Money.new(discounted_price_per_item * 3, 'EUR')
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(2246, 'EUR'))
+
+      expect(calculator.total_price).to eq(expected_price)
     end
 
     it 'returns zero for an empty cart' do
       cart = FactoryBot.create(:cart)
 
+      expected_price = Money.new(0, 'EUR')
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(0, 'EUR'))
+
+      expect(calculator.total_price).to eq(expected_price)
     end
 
     it 'calculates the total price correctly for a large quantity' do
       cart = FactoryBot.create(:cart)
       FactoryBot.create(:cart_item, cart: cart, product: coffee, quantity: 10_000)
 
+      discounted_price_per_item = (coffee.price_cents * Rational(2, 3))
+      expected_total_price_cents = discounted_price_per_item * 10_000
+      expected_price = Money.new(expected_total_price_cents, 'EUR')
+
       calculator = CartPricingCalculator.new(cart)
-      discounted_price_cents = (coffee.price_cents * Rational(2, 3))
 
-      expected_total_price_cents = discounted_price_cents * 10_000
-
-      actual_total_price = calculator.total_price
-
-      expect(actual_total_price).to eq(Money.new(expected_total_price_cents, 'EUR'))
+      expect(calculator.total_price).to eq(expected_price)
     end
 
     it 'calculates the total price for a product without discounts' do
@@ -56,8 +65,10 @@ RSpec.describe CartPricingCalculator, type: :service do
       cart = FactoryBot.create(:cart)
       FactoryBot.create(:cart_item, cart: cart, product: non_discounted_product, quantity: 5)
 
+      expected_price = Money.new(non_discounted_product.price_cents * 5, 'EUR')
       calculator = CartPricingCalculator.new(cart)
-      expect(calculator.total_price).to eq(Money.new(750, 'EUR'))
+
+      expect(calculator.total_price).to eq(expected_price)
     end
   end
 end
