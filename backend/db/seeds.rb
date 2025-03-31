@@ -8,8 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 puts "Cleaning database..."
-Product.destroy_all
+CartItem.destroy_all
 Cart.destroy_all
+Product.destroy_all
 puts "Database cleaned"
 puts "Creating products..."
 Product.create([
