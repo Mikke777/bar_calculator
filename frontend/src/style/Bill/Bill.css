@@ -1,0 +1,32 @@
+.bill-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bill-table th,
+.bill-table td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+.bill-table th {
+  text-align: left;
+}
+
+.bill-table tfoot td {
+  text-align: right;
+  font-weight: bold;
+}
+
+.bill-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.bill-button:hover {
+  background-color: darkgreen;
+}

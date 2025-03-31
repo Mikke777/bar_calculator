@@ -1,6 +1,7 @@
 import React from "react";
 import useProducts from "../hooks/useProducts";
 import useCartItemActions from "../hooks/useCartItemActions";
+import "../style/Sidebar/Sidebar.css";
 
 const Sidebar = ({ cartId, isCalculating }) => {
   const { products, loading, error } = useProducts();

@@ -5,7 +5,7 @@ import CartItem from "./pages/CartItem";
 import Bill from "./pages/Bill";
 import IndexCarts from "./pages/IndexCarts";
 import useCartManager from "./hooks/useCartManager";
-import "./App.css";
+import "./style/App.css";
 
 const App = () => {
   const {
