@@ -12,7 +12,7 @@ const Bill = ({ cartId, onCartClosed }) => {
 
   return (
     <div>
-      <h1>Bill</h1>
+      <h1>Bill of Cart #{cartId}</h1>
       <BillTable cartItems={cartItems} totalPrice={totalPrice} />
       <button onClick={handlePaid} className="bill-button">
         Paid
