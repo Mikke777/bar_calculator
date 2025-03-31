@@ -3,7 +3,7 @@ import useProducts from "../hooks/useProducts";
 import useCartItemActions from "../hooks/useCartItemActions";
 import "../style/Sidebar/Sidebar.css";
 
-const Sidebar = ({ cartId, isCalculating }) => {
+const Sidebar = ({ cartId, isCalculating, isOnIndexCarts }) => {
   const { products, loading, error } = useProducts();
   const { handleAddToCart } = useCartItemActions(cartId);
 
@@ -15,12 +15,14 @@ const Sidebar = ({ cartId, isCalculating }) => {
     return <p>Error loading products. Please try again later.</p>;
   }
 
+  const isDisabled = isCalculating || isOnIndexCarts;
+
   return (
     <div
       className="sidebar"
       style={{
-        opacity: isCalculating ? 0.5 : 1,
-        pointerEvents: isCalculating ? "none" : "auto",
+        opacity: isDisabled ? 0.5 : 1,
+        pointerEvents: isDisabled ? "none" : "auto",
       }}
     >
       <h2 style={{ color: "black" }}>Products</h2>
@@ -30,7 +32,7 @@ const Sidebar = ({ cartId, isCalculating }) => {
             <button
               style={{ width: "100%" }}
               onClick={() => handleAddToCart(product.id)}
-              disabled={isCalculating}
+              disabled={isDisabled}
             >
               {product.name} - {product.formatted_price}
             </button>

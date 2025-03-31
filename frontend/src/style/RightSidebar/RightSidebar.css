@@ -23,3 +23,8 @@
 .right-sidebar button:hover {
   background: #0056b3;
 }
+
+.right-sidebar button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
